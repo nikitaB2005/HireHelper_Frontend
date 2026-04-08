@@ -1,0 +1,139 @@
+/* Dark Glassmorphism Theme */
+
+@import "tailwindcss";
+
+:root {
+  --bg-dark: #050507;
+  --glass-bg: rgba(18, 18, 22, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.03);
+  --accent-amber: #f59e0b;
+  --accent-amber-glow: rgba(245, 158, 11, 0.15);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+}
+
+body {
+  background-color: var(--bg-dark) !important;
+  background-image: 
+    radial-gradient(circle at 50% -10%, var(--accent-amber-glow), transparent 60%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px) !important;
+  background-size: 100% 100%, 30px 30px !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Global Overrides for Proper Finishing */
+
+/* Ensure content shells and root component divs are transparent */
+.content-shell, 
+.min-h-screen.bg-violet-50, 
+.min-h-screen.bg-slate-50, 
+.bg-violet-50, 
+.bg-slate-50,
+.app-shell {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Convert all card-like structures to glass */
+[class*='bg-white'], 
+[class*='bg-slate-50'], 
+[class*='bg-zinc-50'], 
+[class*='bg-violet-50'],
+.bg-white {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Specific exclusions for buttons and logos */
+button[class*='bg-white'], .bg-amber-600, .bg-red-500 {
+  background-image: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Global Text Visibility Fixes */
+.text-slate-900, .text-slate-800, .text-slate-700, .text-zinc-900, .text-zinc-800, .text-violet-900 {
+  color: var(--text-primary) !important;
+}
+.text-slate-500, .text-slate-600, .text-zinc-500, .text-zinc-600, .text-violet-500, .text-violet-100 {
+  color: var(--text-secondary) !important;
+}
+
+/* Icons visibility */
+svg[class*='text-slate-'], svg[class*='text-zinc-'], svg[class*='text-violet-'] {
+  color: var(--text-secondary) !important;
+}
+
+/* Inputs, Selects, and Textareas */
+input, select, textarea {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: white !important;
+  border-radius: 0.75rem !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-amber) !important;
+  box-shadow: 0 0 10px var(--accent-amber-glow) !important;
+}
+
+/* Active Link Branding */
+[routerLinkActive="!bg-violet-600 !text-white"] {
+  background: var(--accent-amber-glow) !important;
+  color: var(--accent-amber) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.1) !important;
+}
+
+/* Gradient and Hero Section Fixes */
+.bg-gradient-to-r, .bg-gradient-to-br {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* Re-apply accent amber colors where specifically needed */
+.bg-amber-600, .bg-amber-500, .text-amber-500, .text-amber-600 {
+  color: var(--accent-amber) !important;
+}
+.bg-amber-600, .bg-amber-500 {
+  background-color: var(--accent-amber) !important;
+  color: white !important;
+}
+
+@layer base {
+  button:not(:disabled), .action-btn {
+    @apply transition-all duration-300 ease-out cursor-pointer;
+  }
+  button:not(:disabled):active {
+    @apply scale-[0.96];
+  }
+  button:not(:disabled):hover {
+    @apply scale-[1.03];
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+router-outlet + * {
+  display: block;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}

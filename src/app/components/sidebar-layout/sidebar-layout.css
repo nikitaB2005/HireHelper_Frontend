@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.app-shell {
+  background: transparent;
+}
+
+.sidebar-shell {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: inset -1px 0 0 var(--glass-highlight);
+}
+
+.content-shell {
+  background: transparent;
+}
+
+.section-divider {
+  border-color: var(--glass-border);
+}
+
+.title-text {
+  color: var(--text-primary);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.subtitle-text {
+  color: var(--text-secondary);
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.action-btn {
+  border-color: var(--glass-border);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.action-btn:hover {
+  background: var(--accent-amber);
+  color: white;
+  border-color: var(--accent-amber);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+

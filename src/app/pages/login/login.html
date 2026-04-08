@@ -1,0 +1,77 @@
+<div class="min-h-screen flex items-center justify-center p-6 animate-fade-in relative overflow-hidden">
+  <!-- Subtle Background Accents -->
+  <div class="absolute -top-48 -right-48 w-96 h-96 bg-amber-600/10 blur-[120px] rounded-full"></div>
+  <div class="absolute -bottom-48 -left-48 w-96 h-96 bg-amber-600/5 blur-[120px] rounded-full"></div>
+
+  <div class="w-full max-w-md bg-zinc-900/40 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl p-10 relative z-10">
+
+    <div class="text-center mb-10">
+      <div class="w-16 h-16 bg-amber-600 rounded-2xl flex items-center justify-center text-white text-3xl font-black shadow-2xl shadow-amber-900/40 mx-auto mb-6">H</div>
+      <h1 class="text-4xl font-black text-white tracking-tight leading-tight">HireHelper</h1>
+      <p class="text-slate-400 text-sm mt-3 font-medium uppercase tracking-[0.2em]">Secure Access Point</p>
+    </div>
+
+    <div class="mb-8">
+      <h2 class="text-2xl font-black text-white mb-2">Welcome Back</h2>
+      <p class="text-slate-400 text-sm font-medium">Please sign in to your workspace.</p>
+    </div>
+
+    <form #loginForm="ngForm" (ngSubmit)="handleLogin()" class="space-y-6">
+
+      <div class="space-y-2">
+        <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Email Address</label>
+        <div class="relative group">
+          <input type="email" name="email" [(ngModel)]="loginData.email" #emailField="ngModel"
+            required email placeholder="name@example.com"
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 pr-12 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+          <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-amber-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+        </div>
+        <div class="text-rose-400 text-[10px] font-black uppercase tracking-wider mt-1 px-1" *ngIf="emailField.invalid && emailField.touched">
+          <span *ngIf="emailField.errors?.['required']">Email is essential</span>
+          <span *ngIf="emailField.errors?.['email']">Invalid email format</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Password</label>
+        <div class="relative group">
+          <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="loginData.password" #passwordField="ngModel"
+            required minlength="6" placeholder="••••••••"
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 pr-12 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+          <button type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-amber-500 hover:text-amber-400 transition-colors">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        <div class="text-rose-400 text-[10px] font-black uppercase tracking-wider mt-1 px-1" *ngIf="passwordField.invalid && passwordField.touched">
+          <span *ngIf="passwordField.errors?.['required']">Password missing</span>
+          <span *ngIf="passwordField.errors?.['minlength']">Minimum 6 characters</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between px-1">
+        <label class="flex items-center gap-3 text-xs font-bold text-slate-400 cursor-pointer group">
+          <input type="checkbox" name="rememberMe" class="accent-amber-600 h-4 w-4 bg-black/20 border-white/10 rounded" />
+          <span class="group-hover:text-slate-300 transition-colors">Remember me</span>
+        </label>
+        <a routerLink="/forgot-password" class="text-xs font-bold text-amber-500 hover:text-amber-400 hover:underline">Forgot?</a>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid"
+        class="w-full h-16 rounded-2xl bg-amber-600 text-white text-base font-black uppercase tracking-[0.2em] shadow-xl shadow-amber-900/40 hover:bg-amber-500 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-3">
+        <span>Login</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+
+    <div class="mt-10 text-center">
+        <p class="text-sm font-medium text-slate-500">
+          New to the system? <a routerLink="/register" class="text-amber-500 font-black hover:text-amber-400 transition-colors ml-1">Create Account</a>
+        </p>
+    </div>
+  </div>
+</div>
+

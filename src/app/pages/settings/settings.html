@@ -1,0 +1,165 @@
+<div class="min-h-screen bg-transparent p-6 lg:p-8 animate-fade-in">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <!-- Header Section -->
+    <section class="relative overflow-hidden bg-zinc-900/60 rounded-[2rem] p-8 text-white border border-white/10 shadow-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="absolute -top-24 -right-24 w-80 h-80 bg-amber-600/10 blur-[100px] rounded-full"></div>
+      
+      <div class="relative z-10">
+        <p class="text-xs uppercase tracking-[0.3em] text-amber-500 font-black mb-3">Account Settings</p>
+        <h1 class="text-4xl font-black mb-2">Manage your profile</h1>
+        <p class="text-slate-400 text-base max-w-md leading-relaxed">Update your personal details, profile photo, and security settings in your workspace.</p>
+      </div>
+
+      <div class="relative z-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-4 flex items-center gap-4 self-start md:self-auto shadow-xl">
+        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Profile preview" class="w-14 h-14 rounded-xl object-cover border-2 border-amber-500/30" />
+        <div *ngIf="!imagePreviewUrl" class="w-14 h-14 rounded-xl bg-amber-600 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-amber-900/20">
+          {{ profileData.first_name ? profileData.first_name.charAt(0).toUpperCase() : 'U' }}
+        </div>
+        <div>
+          <p class="font-black text-white text-lg leading-tight">{{ profileData.first_name || profileData.username || 'User' }}</p>
+          <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mt-1">{{ getRoleLabel() }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Success/Error Messages -->
+    <div *ngIf="successMessage" class="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 text-emerald-400 text-sm font-bold flex items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="passwordErrorMessage" class="rounded-2xl bg-amber-500/10 border border-amber-500/20 px-6 py-4 text-amber-400 text-sm font-bold flex items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      {{ passwordErrorMessage }}
+    </div>
+
+    <div *ngIf="generalErrorMessage" class="rounded-2xl bg-rose-500/10 border border-rose-500/20 px-6 py-4 text-rose-400 text-sm font-bold flex items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      {{ generalErrorMessage }}
+    </div>
+
+    <!-- Form Section -->
+    <section class="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 shadow-2xl">
+      <div class="mb-8 border-b border-white/5 pb-6">
+        <h2 class="text-2xl font-black text-white">Profile Details</h2>
+        <p class="text-sm text-slate-400 mt-2">Update your information across the HireHelper network.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="username">Username</label>
+          <input id="username" type="text" [(ngModel)]="profileData.username" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-slate-500 ml-1" for="email">Email <span class="text-[10px] text-slate-600">(Read-only)</span></label>
+          <input id="email" type="email" [(ngModel)]="profileData.email" readonly 
+            class="w-full h-14 bg-black/40 border border-white/5 rounded-2xl px-5 text-sm text-slate-500 cursor-not-allowed" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="firstName">First Name</label>
+          <input id="firstName" type="text" [(ngModel)]="profileData.first_name" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="lastName">Last Name</label>
+          <input id="lastName" type="text" [(ngModel)]="profileData.last_name" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="phoneNumber">Phone Number</label>
+          <input id="phoneNumber" type="text" [(ngModel)]="profileData.phone_number" placeholder="Enter phone number" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="role">Primary Role</label>
+          <select id="role" [(ngModel)]="profileData.role" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all appearance-none cursor-pointer">
+            <option value="helper" class="bg-zinc-900">Helper</option>
+            <option value="hirer" class="bg-zinc-900">Hirer</option>
+          </select>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="city">City</label>
+          <input id="city" type="text" [(ngModel)]="profileData.city" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="address">Address</label>
+          <input id="address" type="text" [(ngModel)]="profileData.address" 
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+
+        <div class="md:col-span-2 space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="bio">Bio / About Me</label>
+          <textarea id="bio" rows="4" [(ngModel)]="profileData.bio" placeholder="Tell us about yourself..."
+            class="w-full bg-black/20 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all resize-none"></textarea>
+        </div>
+
+        <div class="md:col-span-2 space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="profilePicture">Update Profile Photo</label>
+          <div class="relative group">
+            <input id="profilePicture" type="file" accept="image/*" (change)="handleProfilePictureSelection($event)"
+              class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-4 py-3.5 text-sm text-slate-400 outline-none focus:border-amber-500/50 transition-all file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-black file:uppercase file:bg-amber-600 file:text-white hover:file:bg-amber-500 cursor-pointer" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 shadow-2xl overflow-hidden relative">
+      <div class="mb-8 border-b border-white/5 pb-6">
+        <h2 class="text-2xl font-black text-white">Security & Password</h2>
+        <p class="text-sm text-slate-400 mt-2">Manage your authentication and password preferences.</p>
+      </div>
+
+      <label class="flex items-center justify-between gap-6 rounded-2xl bg-white/5 border border-white/10 p-6 cursor-pointer mb-8 group hover:border-amber-500/30 transition-all">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-600/10 flex items-center justify-center text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <p class="font-black text-white text-lg">Change Password</p>
+            <p class="text-sm text-slate-400">Enable this to set a new secure password.</p>
+          </div>
+        </div>
+        <div class="relative inline-flex items-center">
+            <input type="checkbox" [(ngModel)]="isPasswordSectionVisible" class="h-6 w-6 rounded-lg border-white/10 bg-black/20 text-amber-600 focus:ring-amber-500 cursor-pointer accent-amber-600" />
+        </div>
+      </label>
+
+      <div *ngIf="isPasswordSectionVisible" class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in mb-8">
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="password">New Password</label>
+          <input id="password" type="password" autocomplete="new-password" [(ngModel)]="passwordForm.password" placeholder="Minimum 8 characters"
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+ 
+        <div class="space-y-2">
+          <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1" for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" type="password" autocomplete="new-password" [(ngModel)]="passwordForm.confirmPassword" placeholder="Repeat new password"
+            class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-5 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all" />
+        </div>
+      </div>
+
+      <div class="pt-4 flex flex-col sm:flex-row gap-4">
+        <button type="button" (click)="handleProfileUpdate()" [disabled]="isLoading" 
+          class="flex-1 h-14 px-8 rounded-2xl bg-amber-600 text-white text-base font-black hover:bg-amber-500 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-xl shadow-amber-900/20">
+          {{ isLoading ? 'Saving Changes...' : 'Save All Changes' }}
+        </button>
+        <button type="button" (click)="handleLogout()" 
+          class="h-14 px-8 rounded-2xl bg-rose-600/10 border border-rose-600/20 text-rose-500 text-base font-black hover:bg-rose-600 hover:text-white transition-all">
+          Logout Securely
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+

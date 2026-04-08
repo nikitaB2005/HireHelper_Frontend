@@ -1,0 +1,269 @@
+<div class="min-h-screen bg-transparent p-6 lg:p-8 animate-fade-in relative overflow-hidden">
+  <!-- Dynamic Background Accents -->
+  <div class="absolute -top-48 -right-48 w-96 h-96 bg-amber-600/10 blur-[120px] rounded-full"></div>
+  <div class="absolute -bottom-48 -left-48 w-96 h-96 bg-amber-600/5 blur-[120px] rounded-full"></div>
+
+  <div class="max-w-5xl mx-auto space-y-8 relative z-10">
+    <header class="bg-zinc-900/60 backdrop-blur-2xl rounded-[2.5rem] p-10 border border-white/10 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.4em] text-amber-500 font-black mb-3">New Task</p>
+        <h1 class="text-5xl font-black text-white tracking-tight">Post New Task</h1>
+        <p class="text-slate-400 mt-4 text-lg max-w-xl leading-relaxed">
+          Describe the service you need and find the perfect helper from our community.
+        </p>
+      </div>
+      <div class="bg-black/20 border border-white/10 rounded-3xl p-6 text-center min-w-[160px]">
+        <div class="w-12 h-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-3 shadow-xl shadow-amber-900/20">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <p class="text-sm font-black text-white uppercase tracking-widest">New Order</p>
+      </div>
+    </header>
+
+    <form #taskForm="ngForm" (ngSubmit)="handleTaskCreation(taskForm)" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Form Area -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 lg:p-10 shadow-xl space-y-8">
+          
+          <!-- Task Title -->
+          <div class="space-y-3">
+            <label for="title" class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Task Title <span class="text-rose-500">*</span></label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              [(ngModel)]="taskData.title"
+              placeholder="e.g., Furniture Assembly, Garden Cleaning..."
+              required
+              minlength="5"
+              maxlength="200"
+              #titleField="ngModel"
+              class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all"
+              [ngClass]="{
+                'border-rose-500/50 bg-rose-500/5': (titleField.invalid && titleField.touched) || serverErrors.title
+              }" />
+            <div class="flex items-center justify-between px-1">
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider" *ngIf="(titleField.invalid && titleField.touched) || serverErrors.title">
+                <span *ngIf="titleField.errors?.['required']">Title is essential</span>
+                <span *ngIf="titleField.errors?.['minlength']">Minimum 5 characters</span>
+                <span *ngIf="serverErrors.title">{{ serverErrors.title[0] || serverErrors.title }}</span>
+              </p>
+              <span class="text-slate-500 text-[10px] font-bold ml-auto uppercase tracking-widest">{{ taskData.title.length }}/200</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="space-y-3">
+            <label for="description" class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Detailed Description <span class="text-rose-500">*</span></label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="taskData.description"
+              placeholder="Explain the requirements, tools needed, and specific expectations..."
+              required
+              minlength="20"
+              rows="6"
+              #descriptionField="ngModel"
+              class="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all resize-none"
+              [ngClass]="{
+                'border-rose-500/50 bg-rose-500/5': (descriptionField.invalid && descriptionField.touched) || serverErrors.description
+              }"></textarea>
+            <div class="flex items-center justify-between px-1">
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider" *ngIf="(descriptionField.invalid && descriptionField.touched) || serverErrors.description">
+                <span *ngIf="descriptionField.errors?.['required']">Description is required</span>
+                <span *ngIf="descriptionField.errors?.['minlength']">Minimum 20 characters</span>
+                <span *ngIf="serverErrors.description">{{ serverErrors.description[0] || serverErrors.description }}</span>
+              </p>
+              <span class="text-slate-500 text-[10px] font-bold ml-auto uppercase tracking-widest">{{ taskData.description.length }} chars</span>
+            </div>
+          </div>
+
+          <!-- Location Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <label for="city" class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">City <span class="text-rose-500">*</span></label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                [(ngModel)]="taskData.city"
+                placeholder="e.g., London"
+                required
+                #cityField="ngModel"
+                class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                [ngClass]="{
+                  'border-rose-500/50 bg-rose-500/5': (cityField.invalid && cityField.touched) || serverErrors.city
+                }" />
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider px-1" *ngIf="(cityField.invalid && cityField.touched) || serverErrors.city">
+                {{ serverErrors.city ? (serverErrors.city[0] || serverErrors.city) : 'City is required' }}
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <label for="location" class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Site Address <span class="text-rose-500">*</span></label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                [(ngModel)]="taskData.location"
+                placeholder="Street address..."
+                required
+                #locationField="ngModel"
+                class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                [ngClass]="{
+                  'border-rose-500/50 bg-rose-500/5': (locationField.invalid && locationField.touched) || serverErrors.location
+                }" />
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider px-1" *ngIf="(locationField.invalid && locationField.touched) || serverErrors.location">
+                {{ serverErrors.location ? (serverErrors.location[0] || serverErrors.location) : 'Address is required' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Time Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+              <label for="start_time" class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Commencement <span class="text-rose-500">*</span></label>
+              <input
+                type="datetime-local"
+                id="start_time"
+                name="start_time"
+                [(ngModel)]="taskData.start_time"
+                [min]="minDateTime"
+                required
+                #startTimeField="ngModel"
+                (change)="handleStartTimeChange()"
+                class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all [color-scheme:dark]"
+                [ngClass]="{
+                  'border-rose-500/50 bg-rose-500/5': (startTimeField.invalid && startTimeField.touched) || serverErrors.start_time
+                }" />
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider px-1" *ngIf="(startTimeField.invalid && startTimeField.touched) || serverErrors.start_time">
+                {{ serverErrors.start_time ? (serverErrors.start_time[0] || serverErrors.start_time) : 'Start time required' }}
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <label for="end_time" class="block text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Estimated Completion <span class="text-[9px] font-bold text-slate-600">(Optional)</span></label>
+              <input
+                type="datetime-local"
+                id="end_time"
+                name="end_time"
+                [(ngModel)]="taskData.end_time"
+                [min]="minEndDateTime"
+                (change)="handleEndTimeChange()"
+                class="w-full h-14 bg-black/20 border border-white/10 rounded-2xl px-6 text-sm text-white outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all [color-scheme:dark]"
+                [ngClass]="{
+                  'border-rose-500/50 bg-rose-500/5': serverErrors.end_time || (endTimeError && taskData.end_time)
+                }" />
+              <p class="text-rose-400 text-[10px] font-black uppercase tracking-wider px-1" *ngIf="endTimeError || serverErrors.end_time">
+                {{ serverErrors.end_time ? (serverErrors.end_time[0] || serverErrors.end_time) : (endTimeError || 'Invalid end time') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Task Status Selection -->
+          <div class="space-y-4">
+            <label class="block text-xs font-black uppercase tracking-widest text-amber-500/80 ml-1">Initial Task Status <span class="text-rose-500">*</span></label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="relative group cursor-pointer">
+                <input type="radio" name="status" value="open" [(ngModel)]="taskData.status" required class="hiddenpeer hidden" />
+                <div class="h-16 flex flex-col items-center justify-center rounded-2xl border transition-all duration-300"
+                  [ngClass]="taskData.status === 'open' ? 'bg-amber-600 border-amber-600 text-white shadow-lg shadow-amber-900/40' : 'bg-black/20 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-300'">
+                  <span class="text-[10px] font-black uppercase tracking-widest">Open</span>
+                  <span class="text-[8px] font-bold opacity-60">Accepting Applicants</span>
+                </div>
+              </label>
+
+              <label class="relative group cursor-pointer">
+                <input type="radio" name="status" value="in_progress" [(ngModel)]="taskData.status" class="hiddenpeer hidden" />
+                <div class="h-16 flex flex-col items-center justify-center rounded-2xl border transition-all duration-300"
+                  [ngClass]="taskData.status === 'in_progress' ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg shadow-emerald-900/40' : 'bg-black/20 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-300'">
+                  <span class="text-[10px] font-black uppercase tracking-widest">In Progress</span>
+                  <span class="text-[8px] font-bold opacity-60">Already Started</span>
+                </div>
+              </label>
+
+              <label class="relative group cursor-pointer">
+                <input type="radio" name="status" value="completed" [(ngModel)]="taskData.status" class="hiddenpeer hidden" />
+                <div class="h-16 flex flex-col items-center justify-center rounded-2xl border transition-all duration-300"
+                  [ngClass]="taskData.status === 'completed' ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-900/40' : 'bg-black/20 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-300'">
+                  <span class="text-[10px] font-black uppercase tracking-widest">Completed</span>
+                  <span class="text-[8px] font-bold opacity-60">Archived Record</span>
+                </div>
+              </label>
+            </div>
+            <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider text-center">Note: Helpers can only apply to 'Open' tasks.</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button type="button" routerLink="/dashboard" class="flex-1 h-16 rounded-2xl bg-white/5 border border-white/10 text-slate-400 text-sm font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all">
+              Cancel
+            </button>
+            <button type="submit" [disabled]="taskForm.invalid || isSubmitting" class="flex-[1.5] h-16 rounded-2xl bg-amber-600 text-white text-sm font-black uppercase tracking-[0.2em] shadow-xl shadow-amber-900/40 hover:bg-amber-500 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+              <svg *ngIf="!isSubmitting" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg *ngIf="isSubmitting" class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              {{ isSubmitting ? 'Transmitting...' : 'Post Task' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar / Preview -->
+      <div class="space-y-8">
+        <!-- Image Upload -->
+        <div class="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-lg font-black text-white">Visuals</h2>
+              <p class="text-xs text-slate-500 mt-1 uppercase tracking-widest">Enhanced Listing</p>
+            </div>
+            <span class="px-2 py-1 bg-white/5 rounded-lg border border-white/5 text-[9px] font-black text-slate-500 uppercase">Optional</span>
+          </div>
+
+          <div *ngIf="imagePreview" class="relative rounded-2xl overflow-hidden border border-white/10 mb-4 group">
+            <img [src]="imagePreview" alt="Task preview" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <button type="button" (click)="removeImage()" class="w-12 h-12 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-xl hover:bg-rose-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+          </div>
+
+          <button *ngIf="!imagePreview" type="button" (click)="fileInput.click()" class="w-full h-44 rounded-2xl border-2 border-dashed border-white/10 bg-white/5 text-slate-500 hover:border-amber-500/50 hover:bg-amber-500/5 hover:text-amber-500 transition-all flex flex-col items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span class="text-xs font-black uppercase tracking-widest">Upload Media</span>
+          </button>
+
+          <input type="file" #fileInput accept="image/*" (change)="handleImageSelection($event)" class="hidden" />
+        </div>
+
+        <!-- Real-time Card Preview -->
+        <div class="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 shadow-xl">
+          <h2 class="text-lg font-black text-white mb-6">Live Preview</h2>
+          <div class="rounded-3xl overflow-hidden border border-white/10 bg-black/20">
+            <div class="h-40 bg-zinc-800 relative bg-cover bg-center" [style.background-image]="imagePreview ? 'url(' + imagePreview + ')' : 'none'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+              <span class="absolute top-4 left-4 text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-900/20">
+                {{ getStatusLabel(taskData.status) }}
+              </span>
+            </div>
+            <div class="p-6 space-y-4">
+              <h3 class="font-black text-white text-lg line-clamp-1">{{ taskData.title || 'Task Blueprint' }}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed line-clamp-3">{{ taskData.description || 'Project parameters will be rendered here upon entry...' }}</p>
+              
+              <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {{ taskData.city || 'Location' }}
+                </div>
+                <div class="text-[10px] font-bold text-amber-500/80 uppercase tracking-widest">
+                  {{ formatPreviewDate(taskData.start_time) || 'TBD' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
