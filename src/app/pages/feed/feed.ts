@@ -83,7 +83,15 @@ export class Feed implements OnInit {
     this.isLoading = true;
     this.taskService.getFeed().subscribe({
       next: (response: any) => {
-        this.tasks = response;
+        // Handle both old array format and new paginated object format
+        if (response && response.results && Array.isArray(response.results)) {
+          this.tasks = response.results;
+        } else if (Array.isArray(response)) {
+          this.tasks = response;
+        } else {
+          this.tasks = [];
+        }
+        
         this.extractCities();
         this.filterTasks();
         this.isLoading = false;
